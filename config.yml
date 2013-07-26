@@ -1,0 +1,267 @@
+EntryFee: 200.00
+FirstBase: 0
+FirstModifier: 150
+SecondBase: 0
+SecondModifier: 100
+ThirdBase: 0
+ThirdModifier: 50
+
+Overworld: world
+Nether: world_nether
+End: world_the_end
+
+MinPlayers: 1
+
+SignUpTimeStart: 12000
+SignUpTimeEnd: 14000
+HuntTimeStart: 14000
+HuntTimeEnd: 23000
+
+BadAreas:
+    # x1, y1, z1, x2, y2, z2
+    # add to this list if you want to add invalid spawn areas
+    - "0,0,0,0,0,0"
+
+# == START OF RaidHouse Specific ==
+FirstInvite: 100
+SecondInvite: 100
+ThirdInvite: 100
+FirstContract: 50
+SecondContract: 30
+ThirdContract: 10
+# === END OF RaidHouse Specific ===
+
+Mobs:
+    MobList:
+        - BAT
+        - BLAZE
+        - CAVE_SPIDER
+        - CHICKEN
+        - COW
+        - CREEPER
+        - ENDER_DRAGON
+        - ENDERMAN
+        - GHAST
+        - GIANT
+        - HORSE
+        - IRON_GOLEM
+        - MAGMA_CUBE
+        - MUSHROOM_COW
+        - OCELOT
+        - PIG
+        - PIG_ZOMBIE
+        - SHEEP
+        - SILVERFISH
+        - SKELETON
+        - SLIME
+        - SNOWMAN
+        - SPIDER
+        - SQUID
+        - VILLAGER
+        - WITCH
+        - WITHER
+        - WOLF
+        - ZOMBIE
+    BowPenalty: 50
+    BAT:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    BLAZE:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    CAVE_SPIDER:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    CHICKEN:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    COW:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    CREEPER:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    ENDER_DRAGON:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    ENDERMAN:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        AdditionalDrops: null
+    GHAST:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    GIANT:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    HORSE:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    IRON_GOLEM:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    MAGMA_CUBE:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    MUSHROOM_COW:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    OCELOT:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    PIG:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    PIG_ZOMBIE:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SHEEP:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SILVERFISH:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SKELETON:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SLIME:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SNOWMAN:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SPIDER:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    SQUID:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    VILLAGER:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    WITCH:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    WITHER:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    WOLF:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null
+    ZOMBIE:
+        MaxPoint: 0
+        MinPoint: 0
+        MinMoney: 0.00
+        MaxMoney: 0.00
+        DropChance: 0
+        AdditionalDrops: null

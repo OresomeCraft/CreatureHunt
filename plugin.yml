@@ -1,0 +1,9 @@
+name: CreatureHunt
+main: com.OresomeCraft.CreatureHunt.CreatureHunt
+version: 2.0
+commands:
+    hunt:
+        description: The Creature Hunt commands.
+        usage: /<command>
+        permission: creaturehunt.command
+        permission-message: You don't have the permissions to use this command.
