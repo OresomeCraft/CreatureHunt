@@ -1,4 +1,4 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.listeners;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -9,6 +9,8 @@ import org.bukkit.event.entity.CreatureSpawnEvent;
 import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.oresomecraft.creaturehunt.CreatureHunt;
+import com.oresomecraft.creaturehunt.data.BadAreas;
+import com.oresomecraft.creaturehunt.data.BadMobMeta;
 
 public class CreatureSpawnListener implements Listener {
 
@@ -83,9 +85,9 @@ public class CreatureSpawnListener implements Listener {
         case BUILD_IRONGOLEM: return false;
         case BUILD_SNOWMAN: return false;
         case CUSTOM: return false;
-        case DEFAULT: return true;
+        case DEFAULT: return false;
         case EGG: return false;
-        case JOCKEY: return true;
+        case JOCKEY: return false;
         case LIGHTNING: return true;
         case NATURAL: return true;
         case SLIME_SPLIT: return true;

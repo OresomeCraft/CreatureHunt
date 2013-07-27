@@ -1,22 +1,34 @@
+# Costs $200.00 to enter
 EntryFee: 200.00
+# First place calculated by: FirstBase + FirstModifier x Number of Players entered
 FirstBase: 0
 FirstModifier: 150
+# Second place calculated by: SecondBase + SecondModifier x Number of Players entered
 SecondBase: 0
 SecondModifier: 100
+# Third place calculated by: ThirdBase + ThirdModifier x Number of Players entered
 ThirdBase: 0
 ThirdModifier: 50
 
+# Worlds
 Overworld: world
 Nether: world_nether
 End: world_the_end
 
+# Minimum Players required for the Mob Hunt to begin.
 MinPlayers: 1
 
+# Time signups start (in ticks between 0 and 24000)
 SignUpTimeStart: 12000
+# Time signups end (in ticks between 0 and 24000)
 SignUpTimeEnd: 14000
+# Time when the Mob Hunt begins (in ticks between 0 and 24000)
 HuntTimeStart: 14000
+# Time when the Mob Hunt ends (in ticks between 0 and 24000)
 HuntTimeEnd: 23000
 
+# Areas where if mobs are spawned and/or are killed, will not be
+# counted as 'legitimate' kills.
 BadAreas:
     # x1, y1, z1, x2, y2, z2
     # add to this list if you want to add invalid spawn areas
@@ -32,6 +44,7 @@ ThirdContract: 10
 # === END OF RaidHouse Specific ===
 
 Mobs:
+    # List of Mobs Accepted
     MobList:
         - BAT
         - BLAZE
@@ -62,7 +75,6 @@ Mobs:
         - WITHER
         - WOLF
         - ZOMBIE
-    BowPenalty: 50
     BAT:
         MaxPoint: 0
         MinPoint: 0
@@ -71,19 +83,31 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     BLAZE:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 25
+        MinPoint: 25
+        MinMoney: 4.00
+        MaxMoney: 10.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Blaze Rod x 1 (10% chance)
+            - "369:0,1,1000"
+            # Fire Charge x 1 (5% chance)
+            - "385:0,1,500"
     CAVE_SPIDER:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 10
+        MinPoint: 10
+        MinMoney: 2.50
+        MaxMoney: 6.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Spider Eye x 1 (10% chance)
+            - "375:0,1,1000"
+            # Arrow x 2 (5% chance)
+            - "262:0,2,500"
+            # String x 1 (10% chance)
+            - "287:0,1,1000"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
     CHICKEN:
         MaxPoint: 0
         MinPoint: 0
@@ -99,32 +123,58 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     CREEPER:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 25
+        MinPoint: 25
+        MinMoney: 4.50
+        MaxMoney: 8.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Creeper Head x 1 (0.01% chance)
+            - "397:4,1,1"
+            # Gunpowder x 1 (10% chance)
+            - "289:0,1,1000"
+            # Arrow x 2 (5% chance)
+            - "262:0,2,500"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
     ENDER_DRAGON:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 500
+        MinPoint: 500
+        MinMoney: 500.00
+        MaxMoney: 1000.00
         DropChance: 0
         AdditionalDrops: null
     ENDERMAN:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
-        AdditionalDrops: null
+        MaxPoint: 35
+        MinPoint: 35
+        MinMoney: 2.50
+        MaxMoney: 10.00
+        AdditionalDrops:
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
+            # Ender Pearl x 1 (10% chance)
+            - "368:0,1,1000"
+            # Bottle o' Enchanting x 2 (5% chance)
+            - "384:0,2,500"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
     GHAST:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 35
+        MinPoint: 35
+        MinMoney: 5.00
+        MaxMoney: 10.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Ghast Tear x 1 (10% chance)
+            - "370:0,1,1000"
+            # Nether Quartz x 2 (5% chance)
+            - "406:0,2,500"
+            # Glowstone Dust x 2 (10% chance)
+            - "348:0,2,1000"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
     GIANT:
         MaxPoint: 0
         MinPoint: 0
@@ -147,12 +197,20 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     MAGMA_CUBE:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 3
+        MinPoint: 3
+        MinMoney: 1.00
+        MaxMoney: 2.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Magma Cream x 1 (10% chance)
+            - "378:0,1,1000"
+            # Glowstone Dust x 1 (10% chance)
+            - "348:0,1,1000"
+            # Nether Quartz x 1 (5% chance)
+            - "406:0,1,500"
+            # Emerald x 1 (0.1% chance)
+            - "388:0,1,10"
     MUSHROOM_COW:
         MaxPoint: 0
         MinPoint: 0
@@ -175,12 +233,20 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     PIG_ZOMBIE:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 25
+        MinPoint: 25
+        MinMoney: 2.50
+        MaxMoney: 6.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Nether Quartz x 2 (5% chance)
+            - "406:0,2,500"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
+            # Cooked Porkchop x 1 (25% chance)
+            - "320:0,1,2500"
     SHEEP:
         MaxPoint: 0
         MinPoint: 0
@@ -189,26 +255,40 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     SILVERFISH:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 15
+        MinPoint: 15
+        MinMoney: 1.00
+        MaxMoney: 2.00
         DropChance: 0
         AdditionalDrops: null
     SKELETON:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 20
+        MinPoint: 20
+        MinMoney: 2.50
+        MaxMoney: 5.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Skeleton Head x 1 (0.01% chance)
+            - "397:0,1,1"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
+            # Bones x 1 (10% chance)
+            - "352:0,1,1000"
+            # Arrows x 2 (10% chance)
+            - "262:0,2,1000"
     SLIME:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 2
+        MinPoint: 2
+        MinMoney: 1.00
+        MaxMoney: 1.50
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Slimeball x 1 (5% chance)
+            - "341:0,1,500"
+            # Emerald x 1 (0.02% chance)
+            - "388:0,1,2"
     SNOWMAN:
         MaxPoint: 0
         MinPoint: 0
@@ -217,12 +297,22 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     SPIDER:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 20
+        MinPoint: 20
+        MinMoney: 2.50
+        MaxMoney: 5.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Spider Eye x 1 (10% chance)
+            - "375:0,1,1000"
+            # Arrow x 2 (5% chance)
+            - "262:0,2,500"
+            # String x 1 (10% chance)
+            - "287:0,1,1000"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"
     SQUID:
         MaxPoint: 0
         MinPoint: 0
@@ -238,19 +328,35 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     WITCH:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 40
+        MinPoint: 40
+        MinMoney: 5.00
+        MaxMoney: 10.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Bottle o' Enchanting x 3 (10% chance)
+            - "384:0,3,1000"
+            # Glistering Melon x 1 (10% chance)
+            - "382:0,1,1000"
+            # Book x 1 (20% chance)
+            - "340:0,1,2000"
+            # Emerald x 1 (5% chance)
+            - "388:0,1,500"
+            # Diamond x 1 (2.5% chance)
+            - "264:0,1,250"
     WITHER:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 80
+        MinPoint: 80
+        MinMoney: 50.00
+        MaxMoney: 100.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Wither Skeleton Skull x 1 (1% chance)
+            - "397:1,1,100"
+            # Diamond x 1 (5% chance)
+            - "264:0,1,500"
+            # Emerald x 1 (10% chance)
+            - "388:0,1,1000"
     WOLF:
         MaxPoint: 0
         MinPoint: 0
@@ -259,9 +365,19 @@ Mobs:
         DropChance: 0
         AdditionalDrops: null
     ZOMBIE:
-        MaxPoint: 0
-        MinPoint: 0
-        MinMoney: 0.00
-        MaxMoney: 0.00
+        MaxPoint: 20
+        MinPoint: 20
+        MinMoney: 2.50
+        MaxMoney: 5.00
         DropChance: 0
-        AdditionalDrops: null
+        AdditionalDrops:
+            # Zombie Head x 1 (0.01% chance)
+            - "397:2,1,1"
+            # Rotten Flesh x 1 (10% chance)
+            - "367:0,1,1000"
+            # Arrows x 2 (5% chance)
+            - "262:0,2,500"
+            # Diamond x 1 (0.1% chance)
+            - "264:0,1,10"
+            # Emerald x 1 (0.2% chance)
+            - "388:0,1,20"

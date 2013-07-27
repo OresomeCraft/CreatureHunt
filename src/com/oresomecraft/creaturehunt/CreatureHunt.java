@@ -10,11 +10,10 @@ import org.bukkit.plugin.PluginDescriptionFile;
 import org.bukkit.plugin.RegisteredServiceProvider;
 import org.bukkit.plugin.java.JavaPlugin;
 
-import com.oresomecraft.creaturehunt.listener.CreatureKillEvent;
-import com.oresomecraft.creaturehunt.listener.CreatureSpawnListener;
-import com.oresomecraft.creaturehunt.listener.EntrantDeathListener;
-
-
+import com.oresomecraft.creaturehunt.data.HuntStatStorage;
+import com.oresomecraft.creaturehunt.listeners.CreatureKillListener;
+import com.oresomecraft.creaturehunt.listeners.CreatureSpawnListener;
+import com.oresomecraft.creaturehunt.listeners.EntrantDeathListener;
 
 public class CreatureHunt extends JavaPlugin {
 
@@ -25,7 +24,7 @@ public class CreatureHunt extends JavaPlugin {
     
     public static Economy econ = null;
     
-    public static volatile HashMap<String, GameStorage> enteredPlayers;
+    public static volatile HashMap<String, HuntStatStorage> enteredPlayers;
     
     public static volatile String leadingPlayer;
     public static volatile short leadingScore;
@@ -50,12 +49,12 @@ public class CreatureHunt extends JavaPlugin {
             return;
         }
         
-        enteredPlayers = new HashMap<String, GameStorage>();
+        enteredPlayers = new HashMap<String, HuntStatStorage>();
         
         lead = 0;
         
         getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
-        getServer().getPluginManager().registerEvents(new CreatureKillEvent(), this);
+        getServer().getPluginManager().registerEvents(new CreatureKillListener(), this);
         getServer().getPluginManager().registerEvents(new EntrantDeathListener(), this);
         
         getCommand("hunt").setExecutor(new CreatureHuntCommands());

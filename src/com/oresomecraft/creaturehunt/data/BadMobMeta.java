@@ -1,4 +1,4 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.data;
 
 import org.bukkit.metadata.MetadataValue;
 import org.bukkit.plugin.Plugin;

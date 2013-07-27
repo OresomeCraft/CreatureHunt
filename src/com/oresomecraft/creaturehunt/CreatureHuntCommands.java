@@ -7,6 +7,8 @@ import org.bukkit.command.CommandExecutor;
 import org.bukkit.command.CommandSender;
 import org.bukkit.entity.Player;
 
+import com.oresomecraft.creaturehunt.data.HuntStatStorage;
+
 public class CreatureHuntCommands implements CommandExecutor {
 
     private long signupStart = CreatureHunt.instance.getConfig().getLong("SignUpTimeStart");
@@ -40,7 +42,12 @@ public class CreatureHuntCommands implements CommandExecutor {
                                         player.sendMessage(ChatColor.DARK_GREEN + "You have signed up for the Mob Hunt and have paid $" + ChatColor.GREEN + entryFeeString + ChatColor.DARK_GREEN + ".");
                                         player.sendMessage(ChatColor.DARK_AQUA + "If you wish to leave the Mob Hunt (and be refunded) use: " + ChatColor.AQUA + "/hunt leave" + ChatColor.DARK_AQUA + ".");
                                         CreatureHunt.econ.withdrawPlayer(player.getName(), entryFee);
-                                        CreatureHunt.enteredPlayers.put(player.getName(), new GameStorage());
+                                        CreatureHunt.enteredPlayers.put(player.getName(), new HuntStatStorage());
+                                        for (Player p : Bukkit.getOnlinePlayers()) {
+                                            if (!p.getName().equalsIgnoreCase(player.getName())) {
+                                                p.sendMessage(ChatColor.AQUA + player.getName() + ChatColor.DARK_AQUA + " has signed up for the Mob Hunt!");
+                                            }
+                                        }
                                     } else {
                                         player.sendMessage(String.format(ChatColor.DARK_RED + "You need $" + ChatColor.RED + entryFeeString + ChatColor.DARK_RED
                                                 + " to join the Mob Hunt. You have: $" + ChatColor.RED + "%.2f" + ChatColor.DARK_RED + ".", CreatureHunt.econ.getBalance(player.getName())));
@@ -167,11 +174,18 @@ public class CreatureHuntCommands implements CommandExecutor {
                     } else {
                         sender.sendMessage(ChatColor.DARK_RED + "You must be in-game to use this command.");
                     }
+                } else if (args[0].equalsIgnoreCase("about")) {
+                    sender.sendMessage(ChatColor.DARK_AQUA + "The objective of the Creature Hunt is simple, kill as many");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "Mobs as you can before the time runs out, whilst building up");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "your money pot. Mobs also have some special drops if you're");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "lucky! Everyone gets their money pot at the end and the top");
+                    sender.sendMessage(ChatColor.DARK_AQUA + "three ranked get bonus prizes!");
                 } else {
                     sender.sendMessage(ChatColor.DARK_RED + "Invalid command. Use: " + ChatColor.RED + "/hunt" + ChatColor.DARK_RED + " to see all available commands.");
                 }
             } else {
                 sender.sendMessage(ChatColor.GRAY + "========= " + ChatColor.DARK_GRAY + "Creature Hunt Commands" + ChatColor.GRAY + " =========");
+                sender.sendMessage(ChatColor.DARK_GRAY + " - " + ChatColor.RED + "/hunt about" + ChatColor.DARK_GRAY + " >> " + ChatColor.GRAY + " what's it about?");
                 sender.sendMessage(ChatColor.DARK_GRAY + " - " + ChatColor.RED + "/hunt join" + ChatColor.DARK_GRAY + " >> " + ChatColor.GRAY + "join the hunt!");
                 sender.sendMessage(ChatColor.DARK_GRAY + " - " + ChatColor.RED + "/hunt leave" + ChatColor.DARK_GRAY + " >> " + ChatColor.GRAY + "leave the hunt!");
                 sender.sendMessage(ChatColor.DARK_GRAY + " - " + ChatColor.RED + "/hunt status" + ChatColor.DARK_GRAY + " >> " + ChatColor.GRAY + "info about the hunt!");

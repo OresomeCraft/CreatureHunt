@@ -17,8 +17,10 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
     private long huntEnd = CreatureHunt.instance.getConfig().getLong("HuntTimeEnd");
     private long midTime = (signupEnd - signupStart) / 2 + signupStart;
     
-    private boolean midTimeMessage;
+    private double entryFee = CreatureHunt.instance.getConfig().getDouble("EntryFee");
     
+    private boolean midTimeMessage;
+    private boolean lastMinuteMessage;
     
     public CreatureHuntAsyncTask(String main) {
         mainWorld = main;
@@ -28,7 +30,7 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
     
     @Override
     public void run() {
-        synchronized (CreatureHunt.lock) { 
+        synchronized (CreatureHunt.lock){ 
             //System.out.println("State: " + state + ", MidTimeMessage: " + midTimeMessage);
             long currentWorldTime = -1;
             if (Bukkit.getWorld(mainWorld) != null) {
@@ -46,6 +48,7 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                                 String.format("%.2f", (float) CreatureHunt.instance.getConfig().getDouble("EntryFee")) + ChatColor.DARK_RED + " to join the Mob Hunt!");
                     }
                     midTimeMessage = false;
+                    lastMinuteMessage = false;
                     state = 1;
                 }
             // state 1 >> ready to accept players
@@ -55,12 +58,24 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                 } else if (currentWorldTime >= midTime && !midTimeMessage) {
                     midTimeMessage = true;
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        if (!CreatureHunt.enteredPlayers.containsKey(p.getName())) {
-                            p.sendMessage(ChatColor.DARK_RED + "Only " + ChatColor.RED + ((signupEnd - midTime) / 20) + ChatColor.DARK_RED
-                                    + " seconds remain to signup for the Mob Hunt!");
+                        p.sendMessage(ChatColor.DARK_RED + "Only " + ChatColor.RED + ((signupEnd - currentWorldTime) / 20) + ChatColor.DARK_RED
+                                + " seconds remain to signup for the Mob Hunt!");
+                    }
+                } else if (currentWorldTime < signupStart) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (CreatureHunt.enteredPlayers.containsKey(p.getName())) {
+                            p.sendMessage(ChatColor.DARK_RED + "The Mob Hunt has been cancelled due to a change in time.");
+                            p.sendMessage(ChatColor.RED + "Your entry money has been refunded.");
+                            CreatureHunt.econ.depositPlayer(p.getName(), entryFee);
+                        } else {
+                            p.sendMessage(ChatColor.DARK_RED + "The Mob Hunt has been cancelled due to a change in time.");
                         }
                     }
+                    CreatureHunt.lead = 0;
+                    CreatureHunt.enteredPlayers.clear();
+                    state = 0;
                 }
+                
                 if (currentWorldTime >= huntStart) {
                     if (CreatureHunt.enteredPlayers.size() >= CreatureHunt.instance.getConfig().getInt("MinPlayers")) {
                         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -112,11 +127,29 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                         CreatureHunt.lead = 0;
                         state = 0;
                     }
+                } else if ((currentWorldTime > huntEnd && huntEnd > huntStart)
+                        || (currentWorldTime > huntEnd && currentWorldTime < signupStart && huntEnd < huntStart)) {
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (CreatureHunt.enteredPlayers.containsKey(p.getName())) {
+                            p.sendMessage(ChatColor.DARK_RED + "The Mob Hunt has been cancelled due to a change in time.");
+                        }
+                    }
+                    CreatureHunt.enteredPlayers.clear();
+                    CreatureHunt.lead = 0;
+                    state = 0;
                 }
             // state 3 >> currently playing
             } else if (state == 3) {
-                if ((currentWorldTime >= huntEnd && huntEnd >= huntStart) || (currentWorldTime <= huntStart && huntEnd <= huntStart)) {
+                if (((currentWorldTime >= huntEnd || currentWorldTime < huntStart) && huntEnd > huntStart)
+                        || (currentWorldTime > huntEnd && currentWorldTime < huntStart && huntEnd < huntStart)) {
                     state = 4;
+                } else if (huntEnd > huntStart && currentWorldTime >= huntEnd - 1200 && !lastMinuteMessage) {
+                    lastMinuteMessage = true;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        if (CreatureHunt.enteredPlayers.containsKey(p.getName())) {
+                            p.sendMessage(ChatColor.RED + "There is less than one minute remaining!");
+                        }
+                    }
                 }
             // state 4 >> finished and giving out rewards
             } else if (state == 4) {
@@ -130,11 +163,32 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                 int size = CreatureHunt.enteredPlayers.size();
                 for (String entree : CreatureHunt.enteredPlayers.keySet()) {
                     if (CreatureHunt.enteredPlayers.get(entree).getScore() > firstScore) {
-                        firstScore = CreatureHunt.enteredPlayers.get(entree).getScore();
-                        firstName = entree;
+                        if (firstName == null) {
+                            firstScore = CreatureHunt.enteredPlayers.get(entree).getScore();
+                            firstName = entree;
+                        } else if (secondName != null) {
+                            thirdName = secondName;
+                            thirdScore = secondScore;
+                            secondName = firstName;
+                            secondScore = firstScore;
+                            firstScore = CreatureHunt.enteredPlayers.get(entree).getScore();
+                            firstName = entree;
+                        } else {
+                            secondName = firstName;
+                            secondScore = firstScore;
+                            firstScore = CreatureHunt.enteredPlayers.get(entree).getScore();
+                            firstName = entree;
+                        }
                     } else if (CreatureHunt.enteredPlayers.get(entree).getScore() > secondScore) {
-                        secondScore = CreatureHunt.enteredPlayers.get(entree).getScore();
-                        secondName = entree;
+                        if (secondName != null) {
+                            thirdName = secondName;
+                            thirdScore = secondScore;
+                            secondScore = CreatureHunt.enteredPlayers.get(entree).getScore();
+                            secondName = entree;
+                        } else {
+                            secondScore = CreatureHunt.enteredPlayers.get(entree).getScore();
+                            secondName = entree;
+                        }
                     } else if (CreatureHunt.enteredPlayers.get(entree).getScore() > thirdScore) {
                         thirdScore = CreatureHunt.enteredPlayers.get(entree).getScore();
                         thirdName = entree;
@@ -167,10 +221,10 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                             p.sendMessage(String.format(ChatColor.GOLD + "Congratulations! You won! You have won: $" + ChatColor.WHITE + "%.2f" + ChatColor.GOLD + "!", firstMoney));
                             CreatureHunt.econ.depositPlayer(firstName, firstMoney);
                         } else if (secondName != null && secondName.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(String.format(ChatColor.GREEN + "Congratulations! You came second! You have won: $" + ChatColor.WHITE + "%.2f" + ChatColor.GREEN + "!", firstMoney));
+                            p.sendMessage(String.format(ChatColor.GREEN + "Congratulations! You came second! You have won: $" + ChatColor.WHITE + "%.2f" + ChatColor.GREEN + "!", secondMoney));
                             CreatureHunt.econ.depositPlayer(secondName, secondMoney);
                         } else if (thirdName != null && thirdName.equalsIgnoreCase(p.getName())) {
-                            p.sendMessage(String.format(ChatColor.GREEN + "Congratulations! You came third! You have won: $" + ChatColor.WHITE + "%.2f" + ChatColor.GREEN + "!", firstMoney));
+                            p.sendMessage(String.format(ChatColor.GREEN + "Congratulations! You came third! You have won: $" + ChatColor.WHITE + "%.2f" + ChatColor.GREEN + "!", thirdMoney));
                             CreatureHunt.econ.depositPlayer(thirdName, thirdMoney);
                         } else {
                             p.sendMessage(ChatColor.RED + "Unfortunately you didn't place...");

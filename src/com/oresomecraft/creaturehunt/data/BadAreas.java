@@ -1,4 +1,4 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.data;
 
 public class BadAreas {
 

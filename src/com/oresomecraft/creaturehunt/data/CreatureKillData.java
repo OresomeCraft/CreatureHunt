@@ -1,11 +1,12 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.data;
 
 import java.util.ArrayList;
 import java.util.Random;
 
 import org.bukkit.inventory.ItemStack;
 
-public class EntityDrops {
+
+public class CreatureKillData {
     
     private static Random randgen = new Random();
     
@@ -17,10 +18,10 @@ public class EntityDrops {
     
     public byte dropChance;
     
-    public ArrayList<EntityItemDrop> itemDrops;
+    public ArrayList<CreatureItemDrop> itemDrops;
     
-    public EntityDrops() {
-        itemDrops = new ArrayList<EntityItemDrop>();
+    public CreatureKillData() {
+        itemDrops = new ArrayList<CreatureItemDrop>();
     }
 
     public short getPoints() {
@@ -49,7 +50,7 @@ public class EntityDrops {
     }
 
     public ItemStack getItem() {
-        for (EntityItemDrop item : itemDrops) {
+        for (CreatureItemDrop item : itemDrops) {
             if (randgen.nextInt(10000) < item.dropChance) {
                 ItemStack droppedItem = new ItemStack(item.itemID, item.amount, item.dataValue);
                 return droppedItem;

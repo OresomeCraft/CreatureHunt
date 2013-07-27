@@ -1,6 +1,6 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.data;
 
-public class EntityItemDrop {
+public class CreatureItemDrop {
 
     public int itemID;
     public short dataValue;

@@ -1,12 +1,12 @@
-package com.oresomecraft.creaturehunt;
+package com.oresomecraft.creaturehunt.data;
 
-public class GameStorage {
+public class HuntStatStorage {
 
     private short score;
     private double pot;
     private short deaths;
     
-    public GameStorage() {
+    public HuntStatStorage() {
         score = 0;
         pot = 0.0;
         deaths = 0;

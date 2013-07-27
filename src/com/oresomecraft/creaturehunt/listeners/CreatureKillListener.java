@@ -1,9 +1,10 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.listeners;
 
 import java.util.HashMap;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -11,29 +12,32 @@ import org.bukkit.event.entity.EntityDeathEvent;
 import org.bukkit.inventory.ItemStack;
 
 import com.oresomecraft.creaturehunt.CreatureHunt;
-import com.oresomecraft.creaturehunt.GameStorage;
+import com.oresomecraft.creaturehunt.data.BadAreas;
+import com.oresomecraft.creaturehunt.data.CreatureKillData;
+import com.oresomecraft.creaturehunt.data.CreatureItemDrop;
+import com.oresomecraft.creaturehunt.data.HuntStatStorage;
 
-public class CreatureKillEvent implements Listener {
+public class CreatureKillListener implements Listener {
     
-    private HashMap<String, EntityDrops> mobDrops;
+    private HashMap<String, CreatureKillData> mobDrops;
     
     private String mainWorld, netherWorld, endWorld;
     
-    public CreatureKillEvent() {
+    public CreatureKillListener() {
         mainWorld = CreatureHunt.instance.getConfig().getString("Overworld");
         netherWorld = CreatureHunt.instance.getConfig().getString("Nether");
         endWorld = CreatureHunt.instance.getConfig().getString("End");
         
-        mobDrops = new HashMap<String, EntityDrops>();
+        mobDrops = new HashMap<String, CreatureKillData>();
         for (String mob : CreatureHunt.instance.getConfig().getStringList("Mobs.MobList")) {
-            EntityDrops entityDrops = new EntityDrops();
+            CreatureKillData entityDrops = new CreatureKillData();
             entityDrops.maxPoint = (short) CreatureHunt.instance.getConfig().getInt("Mobs." + mob + ".MaxPoint");
             entityDrops.minPoint = (short) CreatureHunt.instance.getConfig().getInt("Mobs." + mob + ".MinPoint");
             entityDrops.maxMoney = CreatureHunt.instance.getConfig().getInt("Mobs." + mob + ".MaxMoney");
             entityDrops.minMoney = CreatureHunt.instance.getConfig().getInt("Mobs." + mob + ".MinMoney");
             if (CreatureHunt.instance.getConfig().getStringList("Mobs." + mob + ".AdditionalDrops") != null) {
                 for (String drop : CreatureHunt.instance.getConfig().getStringList("Mobs." + mob + ".AdditionalDrops")) {
-                    EntityItemDrop itemDrop = new EntityItemDrop();
+                    CreatureItemDrop itemDrop = new CreatureItemDrop();
                     String[] information = drop.split(",");
                     try {
                         itemDrop.itemID = Integer.parseInt(information[0].split(":")[0]);
@@ -69,21 +73,27 @@ public class CreatureKillEvent implements Listener {
                     Player damager = (Player) event.getEntity().getKiller();
                     synchronized (CreatureHunt.lock) {
                         if (CreatureHunt.asyncTask.state == 3 && CreatureHunt.enteredPlayers.containsKey(damager.getName())) {
-                            if ((event.getEntity().hasMetadata("BadMobSpawn") && !event.getEntity().getMetadata("BadMobSpawn").get(0).asBoolean()) ||
-                                    !event.getEntity().hasMetadata("BadMobSpawn")) {
+                            if (damager.getGameMode() == GameMode.CREATIVE) {
+                                CreatureHunt.enteredPlayers.remove(damager.getName());
+                                damager.sendMessage(ChatColor.DARK_RED + "You have been disqualified for cheating!");
+                                return;
+                            }
+                            if ((event.getEntity().hasMetadata("BadMobSpawn") && !event.getEntity().getMetadata("BadMobSpawn").isEmpty() && !event.getEntity().getMetadata("BadMobSpawn").get(0).asBoolean()) ||
+                                    !event.getEntity().hasMetadata("BadMobSpawn") || (event.getEntity().hasMetadata("BadMobSpawn") && event.getEntity().getMetadata("BadMobSpawn").isEmpty())) {
                                 if (mobDrops.containsKey(event.getEntityType().toString())) {
                                     short points = mobDrops.get(event.getEntityType().toString()).getPoints();
                                     if (points != -1) {
-                                        GameStorage playerData = CreatureHunt.enteredPlayers.get(damager.getName());
-                                        
-                                        damager.sendMessage(ChatColor.DARK_GREEN + "You gain " + ChatColor.GREEN + points + ChatColor.DARK_GREEN + " points!");
-                                        playerData.incrementScore(points);
+                                        HuntStatStorage playerData = CreatureHunt.enteredPlayers.get(damager.getName());
                                         
                                         double money = mobDrops.get(event.getEntityType().toString()).getMoney();
                                         if (money > 0) {
-                                            damager.sendMessage(String.format(ChatColor.DARK_AQUA + "$" + ChatColor.AQUA + "%.2f" + ChatColor.DARK_AQUA + " is added to your money pot.", money));
+                                            damager.sendMessage(ChatColor.DARK_AQUA + "You gain " + ChatColor.AQUA + points + ChatColor.DARK_AQUA + " points! $" + String.format(ChatColor.AQUA + "%.2f" + ChatColor.DARK_AQUA + " is also added to your money pot.", money));
                                             playerData.incrementPot(money);
+                                        } else {
+                                            damager.sendMessage(ChatColor.DARK_AQUA + "You gain " + ChatColor.AQUA + points + ChatColor.DARK_AQUA + " points!");
                                         }
+                                        
+                                        playerData.incrementScore(points);
                                         
                                         ItemStack item = mobDrops.get(event.getEntityType().toString()).getItem();
                                         if (item != null) {

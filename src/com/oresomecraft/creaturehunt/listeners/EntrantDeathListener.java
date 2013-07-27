@@ -1,4 +1,4 @@
-package com.oresomecraft.creaturehunt.listener;
+package com.oresomecraft.creaturehunt.listeners;
 
 import org.bukkit.ChatColor;
 import org.bukkit.event.EventHandler;
