@@ -45,6 +45,23 @@ ThirdContract: 10
 
 Mobs:
     # List of Mobs Accepted
+    ValidMobs:
+        - BLAZE
+        - CAVE_SPIDER
+        - CREEPER
+        - ENDER_DRAGON
+        - ENDERMAN
+        - GHAST
+        - GIANT
+        - MAGMA_CUBE
+        - PIG_ZOMBIE
+        - SILVERFISH
+        - SKELETON
+        - SLIME
+        - SPIDER
+        - WITCH
+        - WITHER
+        - ZOMBIE
     MobList:
         - BAT
         - BLAZE

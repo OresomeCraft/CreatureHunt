@@ -25,7 +25,7 @@ public class CreatureHuntCommands implements CommandExecutor {
                 if (args[0].equalsIgnoreCase("join")) {
                     if (sender instanceof Player) {
                         Player player = (Player) sender;
-                        synchronized (CreatureHunt.lock) {
+                        synchronized (CreatureHunt.LOCK) {
                             if (!CreatureHunt.enteredPlayers.containsKey(player.getName())) {
                                 if (CreatureHunt.asyncTask.state == 0) {
                                     player.sendMessage(ChatColor.DARK_RED + "You can not yet signup for the Mob Hunt.");
@@ -64,7 +64,7 @@ public class CreatureHuntCommands implements CommandExecutor {
                     }
                 } else if (args[0].equalsIgnoreCase("leave")) {
                     if (sender instanceof Player) {
-                        synchronized (CreatureHunt.lock) {
+                        synchronized (CreatureHunt.LOCK) {
                             Player player = (Player) sender;
                             if (CreatureHunt.enteredPlayers.containsKey(player.getName())) {
                                 if (CreatureHunt.asyncTask.state == 0 || CreatureHunt.asyncTask.state == 1) {
@@ -85,7 +85,7 @@ public class CreatureHuntCommands implements CommandExecutor {
                 } else if (args[0].equalsIgnoreCase("status")) {
                     if (sender instanceof Player) {
                         Player player = (Player) sender;
-                        synchronized (CreatureHunt.lock) {
+                        synchronized (CreatureHunt.LOCK) {
                             if (CreatureHunt.enteredPlayers.containsKey(player.getName())) {
                                 if (CreatureHunt.asyncTask.state == 0) {
                                     player.sendMessage(ChatColor.DARK_AQUA + "The Mob Hunt is yet to begin.");

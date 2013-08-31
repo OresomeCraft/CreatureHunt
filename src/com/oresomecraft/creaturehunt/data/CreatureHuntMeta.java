@@ -5,60 +5,70 @@ import org.bukkit.plugin.Plugin;
 
 import com.oresomecraft.creaturehunt.CreatureHunt;
 
-public class BadMobMeta implements MetadataValue {
-    
-    private boolean metaValue;
-    
-    public BadMobMeta(boolean init) {
-        metaValue = init;
-    }
+public class CreatureHuntMeta implements MetadataValue {
 
+    private boolean value;
+    
+    public CreatureHuntMeta(boolean value) {
+        this.value = value;
+    }
+    
     @Override
     public boolean asBoolean() {
-        // TODO Auto-generated method stub
-        return metaValue;
+        return value;
     }
 
     @Override
     public byte asByte() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public double asDouble() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public float asFloat() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public int asInt() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public long asLong() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public short asShort() {
-        // TODO Auto-generated method stub
+        if (value) {
+            return 1;
+        }
         return 0;
     }
 
     @Override
     public String asString() {
-        // TODO Auto-generated method stub
-        return null;
+        return value + "";
     }
 
     @Override

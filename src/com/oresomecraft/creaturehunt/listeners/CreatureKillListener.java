@@ -71,15 +71,15 @@ public class CreatureKillListener implements Listener {
             if (!spawnedInArea) {
                 if (event.getEntity().getKiller() instanceof Player) {
                     Player damager = (Player) event.getEntity().getKiller();
-                    synchronized (CreatureHunt.lock) {
+                    synchronized (CreatureHunt.LOCK) {
                         if (CreatureHunt.asyncTask.state == 3 && CreatureHunt.enteredPlayers.containsKey(damager.getName())) {
                             if (damager.getGameMode() == GameMode.CREATIVE) {
                                 CreatureHunt.enteredPlayers.remove(damager.getName());
                                 damager.sendMessage(ChatColor.DARK_RED + "You have been disqualified for cheating!");
                                 return;
                             }
-                            if ((event.getEntity().hasMetadata("BadMobSpawn") && !event.getEntity().getMetadata("BadMobSpawn").isEmpty() && !event.getEntity().getMetadata("BadMobSpawn").get(0).asBoolean()) ||
-                                    !event.getEntity().hasMetadata("BadMobSpawn") || (event.getEntity().hasMetadata("BadMobSpawn") && event.getEntity().getMetadata("BadMobSpawn").isEmpty())) {
+                            if ((event.getEntity().hasMetadata("CreatureHunt") && event.getEntity().getMetadata("CreatureHunt").get(0).asBoolean())
+                                    || !event.getEntity().hasMetadata("CreatureHunt")){
                                 if (mobDrops.containsKey(event.getEntityType().toString())) {
                                     short points = mobDrops.get(event.getEntityType().toString()).getPoints();
                                     if (points != -1) {

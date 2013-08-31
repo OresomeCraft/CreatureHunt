@@ -3,6 +3,7 @@ package com.oresomecraft.creaturehunt.listeners;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.bukkit.entity.EntityType;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.CreatureSpawnEvent;
@@ -10,14 +11,21 @@ import org.bukkit.event.entity.CreatureSpawnEvent.SpawnReason;
 
 import com.oresomecraft.creaturehunt.CreatureHunt;
 import com.oresomecraft.creaturehunt.data.BadAreas;
-import com.oresomecraft.creaturehunt.data.BadMobMeta;
+import com.oresomecraft.creaturehunt.data.CreatureHuntMeta;
 
 public class CreatureSpawnListener implements Listener {
 
     public static ArrayList<BadAreas> badAreas;
+    public static List<String> allowedMobTypes;
     
     public CreatureSpawnListener() {
         badAreas = new ArrayList<BadAreas>();
+        
+        allowedMobTypes = CreatureHunt.instance.getConfig().getStringList("Mobs.ValidMobs");
+        
+        if (allowedMobTypes == null) {
+            allowedMobTypes = new ArrayList<String>();
+        }
         
         List<String> conBadAreas = CreatureHunt.instance.getConfig().getStringList("BadAreas");
         if (conBadAreas != null) {
@@ -59,24 +67,24 @@ public class CreatureSpawnListener implements Listener {
     
     @EventHandler
     public void onCreatureSpawn(CreatureSpawnEvent event) {
-        if (!event.getEntity().hasMetadata("BadMobSpawn")) {
-            boolean spawnedInArea = false;
-            for (BadAreas area : badAreas) {
-                if (area.isInArea(event.getLocation().getBlockX(), event.getLocation().getBlockY(), event.getLocation().getBlockZ())) {
-                    spawnedInArea = true;
-                    break;
-                }
-            }
-            if (spawnedInArea) {
-                event.getEntity().setMetadata("BadMobSpawn", new BadMobMeta(true));
-            } else {
-                if (validSpawnReason(event.getSpawnReason())) {
-                    event.getEntity().setMetadata("BadMobSpawn", new BadMobMeta(false));
-                } else {
-                    event.getEntity().setMetadata("BadMobSpawn", new BadMobMeta(true));
-                }
+        boolean spawnedInArea = false;
+        for (BadAreas area : badAreas) {
+            if (area.isInArea(event.getLocation().getBlockX(), event.getLocation().getBlockY(), event.getLocation().getBlockZ())) {
+                spawnedInArea = true;
+                break;
             }
         }
+        if (isValidMob(event.getEntityType())) {
+            if (!validSpawnReason(event.getSpawnReason()) || spawnedInArea) {
+                event.getEntity().setMetadata("CreatureHunt", new CreatureHuntMeta(false));
+            } else {
+                event.getEntity().setMetadata("CreatureHunt", new CreatureHuntMeta(true));
+            }
+        }
+    }
+
+    private boolean isValidMob(EntityType entityType) {
+        return allowedMobTypes.contains(entityType + "");
     }
 
     private boolean validSpawnReason(SpawnReason spawnReason) {
@@ -85,9 +93,9 @@ public class CreatureSpawnListener implements Listener {
         case BUILD_IRONGOLEM: return false;
         case BUILD_SNOWMAN: return false;
         case CUSTOM: return false;
-        case DEFAULT: return false;
+        case DEFAULT: return true;
         case EGG: return false;
-        case JOCKEY: return false;
+        case JOCKEY: return true;
         case LIGHTNING: return true;
         case NATURAL: return true;
         case SLIME_SPLIT: return true;
@@ -96,6 +104,6 @@ public class CreatureSpawnListener implements Listener {
         case VILLAGE_DEFENSE: return true;
         case VILLAGE_INVASION: return true;
         }
-        return false;
+        return true;
     }
 }

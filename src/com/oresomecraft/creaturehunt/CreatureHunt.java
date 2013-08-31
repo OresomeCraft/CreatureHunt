@@ -20,7 +20,7 @@ public class CreatureHunt extends JavaPlugin {
     private final Logger logger = Logger.getLogger("Minecraft");
     private PluginDescriptionFile pdfFile;
     
-    public static final Object lock = new Object();
+    public static final Object LOCK = new Object();
     
     public static Economy econ = null;
     
@@ -28,8 +28,6 @@ public class CreatureHunt extends JavaPlugin {
     
     public static volatile String leadingPlayer;
     public static volatile short leadingScore;
-    
-    public static int lead;
     
     public static CreatureHunt instance = null;
     
@@ -51,15 +49,13 @@ public class CreatureHunt extends JavaPlugin {
         
         enteredPlayers = new HashMap<String, HuntStatStorage>();
         
-        lead = 0;
-        
         getServer().getPluginManager().registerEvents(new CreatureSpawnListener(), this);
         getServer().getPluginManager().registerEvents(new CreatureKillListener(), this);
         getServer().getPluginManager().registerEvents(new EntrantDeathListener(), this);
         
         getCommand("hunt").setExecutor(new CreatureHuntCommands());
         
-        asyncTask = new CreatureHuntAsyncTask(getConfig().getString("Overworld"));
+        asyncTask = new CreatureHuntAsyncTask(getConfig().getString("Overworld"), getConfig().getString("Nether"));
         asyncTask.runTaskTimerAsynchronously(this, 20L, 40L);
         
         logger.info(pdfFile.getName() + " [V" + pdfFile.getVersion() + "] is enabled!");
@@ -70,7 +66,7 @@ public class CreatureHunt extends JavaPlugin {
 	public void onDisable() {
         logger.info(pdfFile.getName() + " [V" + pdfFile.getVersion() + "] is disabling...");
         Bukkit.getServer().getScheduler().cancelTasks(this);
-        synchronized (lock) {
+        synchronized (LOCK) {
 	        if (asyncTask.state == 2) {
 	        	logger.info("Returning balances to players...");
 	        	for (String player : enteredPlayers.keySet()) {

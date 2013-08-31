@@ -2,6 +2,7 @@ package com.oresomecraft.creaturehunt;
 
 import org.bukkit.Bukkit;
 import org.bukkit.ChatColor;
+import org.bukkit.entity.Entity;
 import org.bukkit.entity.Player;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -21,8 +22,9 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
     
     private boolean midTimeMessage;
     private boolean lastMinuteMessage;
+    private boolean warningMobClearMessage;
     
-    public CreatureHuntAsyncTask(String main) {
+    public CreatureHuntAsyncTask(String main, String nether) {
         mainWorld = main;
         
         state = 0;
@@ -30,7 +32,7 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
     
     @Override
     public void run() {
-        synchronized (CreatureHunt.lock){ 
+        synchronized (CreatureHunt.LOCK){ 
             //System.out.println("State: " + state + ", MidTimeMessage: " + midTimeMessage);
             long currentWorldTime = -1;
             if (Bukkit.getWorld(mainWorld) != null) {
@@ -49,6 +51,9 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                     }
                     midTimeMessage = false;
                     lastMinuteMessage = false;
+                    warningMobClearMessage = false;
+                    CreatureHunt.leadingPlayer = null;
+                    CreatureHunt.leadingScore = 0;
                     state = 1;
                 }
             // state 1 >> ready to accept players
@@ -58,8 +63,7 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                 } else if (currentWorldTime >= midTime && !midTimeMessage) {
                     midTimeMessage = true;
                     for (Player p : Bukkit.getOnlinePlayers()) {
-                        p.sendMessage(ChatColor.DARK_RED + "Only " + ChatColor.RED + ((signupEnd - currentWorldTime) / 20) + ChatColor.DARK_RED
-                                + " seconds remain to signup for the Mob Hunt!");
+                        p.sendMessage(ChatColor.DARK_RED + "Time is running out to signup for the Mob Hunt! " + ChatColor.RED + "/hunt join" + ChatColor.DARK_RED + "!");
                     }
                 } else if (currentWorldTime < signupStart) {
                     for (Player p : Bukkit.getOnlinePlayers()) {
@@ -71,9 +75,13 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                             p.sendMessage(ChatColor.DARK_RED + "The Mob Hunt has been cancelled due to a change in time.");
                         }
                     }
-                    CreatureHunt.lead = 0;
                     CreatureHunt.enteredPlayers.clear();
                     state = 0;
+                } else if (currentWorldTime >= signupEnd - 1200 && !warningMobClearMessage) {
+                    warningMobClearMessage = true;
+                    for (Player p : Bukkit.getOnlinePlayers()) {
+                        p.sendMessage(ChatColor.RED + "Warning: " + ChatColor.DARK_RED + "Clearing Hostile Mobs not from spawners in " + ChatColor.RED + "1" + ChatColor.DARK_RED + " minute.");
+                    }
                 }
                 
                 if (currentWorldTime >= huntStart) {
@@ -83,6 +91,11 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                                 p.sendMessage(ChatColor.DARK_GREEN + "The Mob Hunt as begun! Go and kill those evil creatures!");
                             } else {
                                 p.sendMessage(ChatColor.DARK_RED + "You can no longer sign-up for the Mob Hunt...");
+                            }
+                        }
+                        for (Entity e : Bukkit.getWorld(mainWorld).getEntities()) {
+                            if (e.hasMetadata("CreatureHunt") && e.getMetadata("CreatureHunt").get(0).asBoolean()) {
+                                e.remove();
                             }
                         }
                         state = 3;
@@ -96,7 +109,6 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                                 p.sendMessage(ChatColor.DARK_RED + "You can no longer sign-up for the Mob Hunt...");
                             }
                         }
-                        CreatureHunt.lead = 0;
                         CreatureHunt.enteredPlayers.clear();
                         state = 0;
                     }
@@ -112,6 +124,11 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                                 p.sendMessage(ChatColor.DARK_RED + "You can no longer sign-up for the Mob Hunt...");
                             }
                         }
+                        for (Entity e : Bukkit.getWorld(mainWorld).getEntities()) {
+                            if (e.hasMetadata("CreatureHunt") && e.getMetadata("CreatureHunt").get(0).asBoolean()) {
+                                e.remove();
+                            }
+                        }
                         state = 3;
                     } else {
                         for (Player p : Bukkit.getOnlinePlayers()) {
@@ -124,7 +141,6 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                             }
                         }
                         CreatureHunt.enteredPlayers.clear();
-                        CreatureHunt.lead = 0;
                         state = 0;
                     }
                 } else if ((currentWorldTime > huntEnd && huntEnd > huntStart)
@@ -135,7 +151,6 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                         }
                     }
                     CreatureHunt.enteredPlayers.clear();
-                    CreatureHunt.lead = 0;
                     state = 0;
                 }
             // state 3 >> currently playing
@@ -237,7 +252,6 @@ public class CreatureHuntAsyncTask extends BukkitRunnable {
                         }
                     }
                 }
-                CreatureHunt.lead = 0;
                 CreatureHunt.enteredPlayers.clear();
                 state = 0;
             }
